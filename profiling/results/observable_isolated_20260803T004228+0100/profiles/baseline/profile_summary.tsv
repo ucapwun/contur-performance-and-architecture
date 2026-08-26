@@ -1,0 +1,5 @@
+profile	profile_total_s	profile_total_calls	profile_primitive_calls	function	source_file	line	primitive_calls	total_calls	internal_s	cumulative_s
+profile.prof	831.269180211	1156920804	1141032509	__getExpected	/unix/cedar/junyingwu/dissertation_worktrees/observable_before_20260803/src/contur/factories/test_observable.py	172	120500	120500	72.201776716	300.498194079
+profile.prof	831.269180211	1156920804	1141032509	__init__	/unix/cedar/junyingwu/dissertation_worktrees/observable_before_20260803/src/contur/factories/test_observable.py	29	120500	120500	0.900574890	334.118794374
+profile.prof	831.269180211	1156920804	1141032509	__init__	/unix/cedar/junyingwu/dissertation_worktrees/observable_before_20260803/src/contur/factories/test_observable.py	626	447000	447000	0.202903957	0.202903957
+profile.prof	831.269180211	1156920804	1141032509	add_signal_component	/unix/cedar/junyingwu/dissertation_worktrees/observable_before_20260803/src/contur/factories/test_observable.py	404	120500	120500	10.515607303	224.572669182

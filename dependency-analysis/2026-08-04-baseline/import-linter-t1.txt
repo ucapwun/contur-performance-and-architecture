@@ -1,0 +1,37 @@
+Import Linter 2.13; grimp 3.15; Python 3.11.9
+Revision: daddcdabde8d0842d54467cbc1fdfed7c57c4ed1
+Command: PYTHONPATH=src lint-imports --no-cache --verbose
+Limitation: src/contur/run/run_mkthy.py excluded because the committed file contains Git conflict markers.
+
+Analyzed 64 files, 217 dependencies.
+proposed layered architecture BROKEN
+Contracts: 0 kept, 1 broken.
+
+contur.database is not allowed to import contur.data:
+- contur.database.static_db -> contur.data.data_objects (l.11)
+
+contur.data is not allowed to import contur.factories:
+- contur.data.sm_theory_builders -> contur.factories.yoda_factories (l.3)
+- contur.data.build_covariance -> contur.factories.yoda_factories (l.95)
+
+contur.scan is not allowed to import contur.run:
+- contur.scan.grid_tools -> contur.run.run_batch_submit (l.10)
+
+contur.factories is not allowed to import contur.plot:
+- contur.factories.likelihood -> contur.plot.profile_plot (l.27)
+- contur.factories.depot -> contur.plot.yoda_plotting (l.16)
+- contur.factories.test_observable -> contur.plot.yoda_plotting (l.13)
+
+contur.util is not allowed to import contur.database:
+- contur.util.rst_utils -> contur.database.static_db (l.5)
+
+contur.util is not allowed to import contur.factories:
+- contur.util.rst_utils -> contur.factories.yoda_factories (l.25)
+
+contur.data is not allowed to import contur.plot:
+- contur.data.data_objects -> contur.plot.html_utils (l.152)
+
+contur.data is not allowed to import contur.scan:
+- contur.data.data_access_db -> contur.scan.grid_tools (l.6)
+- contur.data.data_access_db -> contur.scan.os_functions (l.7)
+

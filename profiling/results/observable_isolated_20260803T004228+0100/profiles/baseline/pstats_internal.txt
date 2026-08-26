@@ -1,0 +1,60 @@
+Mon Aug  3 01:47:22 2026    /unix/cedar/junyingwu/contur_compare/dissertation_runs/observable_isolated_20260803T004228+0100/profiles/baseline/profile.prof
+
+         1156920804 function calls (1141032509 primitive calls) in 831.269 seconds
+
+   Ordered by: internal time
+   List reduced from 6217 to 50 due to restriction <50>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   120500   72.202    0.001  300.498    0.002 test_observable.py:172(__getExpected)
+  6845297   42.211    0.000   42.211    0.000 {built-in method posix.stat}
+  6839679   40.097    0.000  137.376    0.000 <frozen importlib._bootstrap_external>:1514(find_spec)
+  6838444   31.501    0.000  220.489    0.000 <frozen importlib._bootstrap>:901(_find_spec)
+      303   25.986    0.086   27.069    0.089 file_readers.py:15(get_histos)
+13819490/718384   25.102    0.000   67.928    0.000 arrayprint.py:789(recurser)
+     1078   20.051    0.019   26.144    0.024 build_covariance.py:31(<listcomp>)
+6838490/6837091   19.248    0.000  331.646    0.000 <frozen importlib._bootstrap>:1002(_find_and_load)
+   718384   18.092    0.000   53.218    0.000 arrayprint.py:934(fillFormat)
+ 34198904   17.490    0.000   44.508    0.000 <frozen importlib._bootstrap_external>:121(_path_join)
+6838460/6837091   17.107    0.000  246.682    0.000 <frozen importlib._bootstrap>:967(_find_and_load_unlocked)
+ 10497520   16.224    0.000   21.926    0.000 arrayprint.py:1018(__call__)
+ 34198904   15.681    0.000   21.404    0.000 <frozen importlib._bootstrap_external>:123(<listcomp>)
+  6838441   14.459    0.000  161.409    0.000 <frozen importlib._bootstrap_external>:1383(_get_spec)
+  6839708   14.404    0.000   23.776    0.000 <frozen importlib._bootstrap>:166(_get_module_lock)
+      172   11.264    0.065   11.266    0.065 data_objects.py:83(__init__)
+   120500   11.131    0.000  153.140    0.001 yoda_factories.py:303(root_n_errors)
+8824755/8325171   11.111    0.000  155.103    0.000 {method 'format' of 'str' objects}
+     5390   10.550    0.002   11.026    0.002 build_covariance.py:57(_getBreakdownAttr)
+   120500   10.516    0.000  224.573    0.002 test_observable.py:404(add_signal_component)
+  6839708   10.015    0.000   11.853    0.000 <frozen importlib._bootstrap>:87(acquire)
+  6839708    9.777    0.000   11.755    0.000 <frozen importlib._bootstrap>:112(release)
+117990337/117987877    7.536    0.000    7.536    0.000 {built-in method builtins.len}
+ 76308748    6.888    0.000    6.888    0.000 {method 'rstrip' of 'str' objects}
+ 10497520    6.722    0.000    9.007    0.000 arrayprint.py:739(_extendLine)
+ 10497520    6.643    0.000   17.921    0.000 arrayprint.py:753(_extendLine_pretty)
+  2240385    6.613    0.000    6.613    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+ 15219456    6.579    0.000    6.579    0.000 {built-in method numpy.core._multiarray_umath.dragon4_positional}
+ 34199810    6.019    0.000    6.019    0.000 <frozen importlib._bootstrap>:231(_verbose_message)
+35398004/35397995    5.896    0.000    6.092    0.000 {method 'join' of 'str' objects}
+ 27352456    5.795    0.000    8.592    0.000 <frozen importlib._bootstrap>:878(__exit__)
+ 27352456    5.686    0.000    8.394    0.000 <frozen importlib._bootstrap>:874(__enter__)
+       70    5.596    0.080   72.787    1.040 yoda_factories.py:161(load_ref_aos)
+  6838458    5.347    0.000    7.488    0.000 <frozen importlib._bootstrap>:58(__init__)
+  6838458    5.293    0.000    7.366    0.000 <frozen importlib._bootstrap>:185(cb)
+ 20520562    4.918    0.000    4.918    0.000 {method 'rpartition' of 'str' objects}
+  1146147    4.734    0.000    8.014    0.000 signal.py:230(signal)
+  6838490    4.719    0.000   40.343    0.000 <frozen importlib._bootstrap>:156(__enter__)
+   126705    4.585    0.000   31.555    0.000 utils.py:117(mkPlotFriendlyScatter)
+  6838441    4.533    0.000  165.942    0.000 <frozen importlib._bootstrap_external>:1415(find_spec)
+  6351575    4.515    0.000    9.365    0.000 {built-in method builtins.max}
+ 41030622    4.477    0.000    4.477    0.000 {built-in method _imp.acquire_lock}
+   377770    4.466    0.000    4.466    0.000 {method 'execute' of 'sqlite3.Cursor' objects}
+  6838448    4.344    0.000    4.344    0.000 <frozen importlib._bootstrap>:351(__init__)
+  6839638    4.276    0.000    6.405    0.000 <frozen importlib._bootstrap>:398(parent)
+ 41030622    4.164    0.000    4.164    0.000 {built-in method _imp.release_lock}
+  8172736    3.713    0.000    6.546    0.000 arrayprint.py:984(<genexpr>)
+   718384    3.679    0.000  133.635    0.000 arrayprint.py:523(_array2string)
+ 22161935    3.634    0.000    3.636    0.000 {built-in method builtins.isinstance}
+  5775584    3.511    0.000    3.511    0.000 {built-in method numpy.core._multiarray_umath.dragon4_scientific}
+
+

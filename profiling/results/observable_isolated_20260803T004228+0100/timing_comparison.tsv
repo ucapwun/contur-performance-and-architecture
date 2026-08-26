@@ -1,0 +1,2 @@
+baseline_case	modified_case	baseline_mean_s	modified_mean_s	modified_minus_baseline_s	time_reduction_percent	speedup_ratio
+baseline	modified	601.750000	386.766667	-214.983333	35.726354	1.555848

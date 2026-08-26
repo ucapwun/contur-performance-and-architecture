@@ -1,0 +1,7 @@
+case	repetition	elapsed_s	user_s	system_s	max_rss_kb	time_file
+baseline	1	605.460000	612.24	40.45	5138548	runs/unprofiled_1_baseline/time.txt
+modified	1	387.140000	413.01	22.33	5138524	runs/unprofiled_1_modified/time.txt
+baseline	2	597.220000	606.10	40.82	5138552	runs/unprofiled_2_baseline/time.txt
+modified	2	383.410000	409.96	22.43	5137448	runs/unprofiled_2_modified/time.txt
+baseline	3	602.570000	610.79	41.08	5138568	runs/unprofiled_3_baseline/time.txt
+modified	3	389.750000	415.10	22.45	5138536	runs/unprofiled_3_modified/time.txt

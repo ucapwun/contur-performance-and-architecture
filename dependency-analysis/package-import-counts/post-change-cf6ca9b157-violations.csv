@@ -1,0 +1,12 @@
+source_package,target_package,direct_imports
+data,factories,2
+data,plot,1
+data,scan,2
+database,data,1
+factories,database,5
+factories,plot,3
+plot,database,2
+run,database,7
+scan,database,1
+scan,run,1
+webpages,database,1

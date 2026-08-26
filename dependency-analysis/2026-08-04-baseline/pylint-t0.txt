@@ -1,0 +1,10 @@
+Pylint 4.0.6; astroid 4.0.4; Python 3.11.9
+Revision: cb0d0f1866caae0bbc3393a5c9c04504a01716cb
+Limitation: run_mkthy.py excluded for a like-for-like comparison with T1.
+
+************* Module contur.data.data_objects
+src/contur/data/data_objects.py:1:0: R0401: Cyclic import (contur.config.config -> contur.config.logger) (cyclic-import)
+src/contur/data/data_objects.py:1:0: R0401: Cyclic import (contur.data.data_objects -> contur.plot.html_utils -> contur.data.static_db) (cyclic-import)
+src/contur/data/data_objects.py:1:0: R0401: Cyclic import (contur.data.build_covariance -> contur.factories.yoda_factories) (cyclic-import)
+src/contur/data/data_objects.py:1:0: R0401: Cyclic import (contur.run.run_batch_submit -> contur.scan.grid_tools) (cyclic-import)
+src/contur/data/data_objects.py:1:0: R0401: Cyclic import (contur.data.data_objects -> contur.data.static_db) (cyclic-import)

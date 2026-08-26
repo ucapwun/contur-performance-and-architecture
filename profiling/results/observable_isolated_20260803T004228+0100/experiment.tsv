@@ -1,0 +1,9 @@
+experiment	observable_isolated
+created	2026-08-03T00:42:29+0100
+grid	/unix/cedar/junyingwu/contur_compare/grid_snapshot
+yoda_files	300
+repetitions	3
+execution_mode	serial (--nomultip)
+profile_each_case	1
+warm_cache	1
+extra_contur_args	

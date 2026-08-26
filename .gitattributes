@@ -1,0 +1,7 @@
+# Preserve recorded evidence artefacts byte-for-byte.
+*.csv -text
+*.tsv -text
+*.log -text
+*.txt -text
+*.prof binary
+*.pdf binary

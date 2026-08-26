@@ -1,0 +1,60 @@
+Mon Aug  3 01:56:27 2026    /unix/cedar/junyingwu/contur_compare/dissertation_runs/observable_isolated_20260803T004228+0100/profiles/modified/profile.prof
+
+         736177812 function calls (720289517 primitive calls) in 534.094 seconds
+
+   Ordered by: cumulative time
+   List reduced from 6217 to 50 due to restriction <50>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   1405/1    0.031    0.000  535.132  535.132 {built-in method builtins.exec}
+        1    0.000    0.000  535.132  535.132 contur:3(<module>)
+        1    0.036    0.036  521.800  521.800 run_analysis.py:244(main)
+        1    0.010    0.010  521.758  521.758 run_analysis.py:134(process_grid)
+      100    0.909    0.009  430.228    4.302 run_analysis.py:103(process_runpoint)
+      100    1.485    0.015  429.318    4.293 contur_point.py:243(process)
+      100    1.019    0.010  314.747    3.147 contur_point.py:176(build_observables)
+   120500   10.844    0.000  225.089    0.002 test_observable.py:399(add_signal_component)
+   120500   11.007    0.000  152.232    0.001 yoda_factories.py:303(root_n_errors)
+4044755/3545171    6.979    0.000  149.293    0.000 {method 'format' of 'str' objects}
+   718402    0.913    0.000  141.722    0.000 arrayprint.py:1595(_array_str_implementation)
+   718384    2.054    0.000  140.808    0.000 arrayprint.py:561(array2string)
+   718402    1.804    0.000  134.519    0.000 arrayprint.py:506(wrapper)
+   718384    3.686    0.000  132.055    0.000 arrayprint.py:523(_array2string)
+2058490/2057091    6.636    0.000  109.679    0.000 <frozen importlib._bootstrap>:1002(_find_and_load)
+2058460/2057091    5.679    0.000   80.759    0.000 <frozen importlib._bootstrap>:967(_find_and_load_unlocked)
+   121705    0.449    0.000   77.700    0.001 yoda_factories.py:93(load_bg_data)
+       70    5.770    0.082   74.046    1.058 yoda_factories.py:161(load_ref_aos)
+      100    0.069    0.001   74.044    0.740 contur_point.py:252(<listcomp>)
+   120500    0.076    0.000   73.976    0.001 test_observable.py:489(likelihood)
+   120500    0.482    0.000   73.900    0.001 test_observable.py:459(build_likelihood)
+   124100    0.579    0.000   73.432    0.001 likelihood.py:51(__init__)
+  2058444   10.250    0.000   71.092    0.000 <frozen importlib._bootstrap>:901(_find_spec)
+     4815    0.057    0.000   67.815    0.014 yoda_factories.py:179(load_ref_ao)
+   718384    0.749    0.000   67.722    0.000 arrayprint.py:780(_formatArray)
+13819490/718384   25.119    0.000   66.972    0.000 arrayprint.py:789(recurser)
+   718384    2.976    0.000   60.479    0.000 arrayprint.py:452(_get_format_function)
+   718384    0.952    0.000   55.912    0.000 arrayprint.py:411(<lambda>)
+   718384    2.040    0.000   54.960    0.000 arrayprint.py:907(__init__)
+   120500    0.900    0.000   54.843    0.000 likelihood.py:137(__build_stats)
+      300    0.002    0.000   54.184    0.181 contur_point.py:161(load_aos)
+      300    0.864    0.003   54.182    0.181 yoda_factories.py:396(__init__)
+  2058441    1.480    0.000   53.596    0.000 <frozen importlib._bootstrap_external>:1415(find_spec)
+      300    0.415    0.001   53.318    0.178 yoda_factories.py:405(__read_yoda_file)
+   718384   17.987    0.000   52.575    0.000 arrayprint.py:934(fillFormat)
+  2058441    4.953    0.000   52.116    0.000 <frozen importlib._bootstrap_external>:1383(_get_spec)
+    89349    1.547    0.000   45.550    0.001 likelihood.py:364(__chisq)
+  2059679   12.924    0.000   44.078    0.000 <frozen importlib._bootstrap_external>:1514(find_spec)
+     5390    0.298    0.000   42.372    0.008 build_covariance.py:16(__init__)
+   120500    0.919    0.000   34.209    0.000 test_observable.py:29(__init__)
+   126705    0.544    0.000   34.133    0.000 yoda_factories.py:24(mkConturFriendlyScatter)
+   126705    4.569    0.000   31.982    0.000 utils.py:117(mkPlotFriendlyScatter)
+    37773    0.040    0.000   30.268    0.001 __init__.py:97(full_load)
+    37773    0.151    0.000   30.228    0.001 __init__.py:74(load)
+    37773    0.032    0.000   29.536    0.001 constructor.py:47(get_single_data)
+    37773    0.089    0.000   28.426    0.001 composer.py:29(get_single_node)
+      303   25.705    0.085   26.781    0.088 file_readers.py:15(get_histos)
+     1078   20.383    0.019   26.598    0.025 build_covariance.py:31(<listcomp>)
+  1162200    0.637    0.000   25.582    0.000 parser.py:94(check_event)
+  2093035    2.722    0.000   25.505    0.000 utils.py:36(splitPath)
+
+

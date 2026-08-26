@@ -1,0 +1,1 @@
+python /unix/cedar/junyingwu/dissertation_worktrees/observable_after_20260803/bin/contur -g /unix/cedar/junyingwu/contur_compare/grid_snapshot --nomultip 

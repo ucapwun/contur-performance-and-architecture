@@ -1,0 +1,9 @@
+source_package,target_package,direct_imports
+data,factories,2
+data,plot,1
+data,scan,2
+factories,plot,3
+scan,run,1
+util,data,3
+util,factories,1
+util,run,1

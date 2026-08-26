@@ -1,0 +1,61 @@
+{
+  "label": "baseline-cb0d0f1866",
+  "revision": "cb0d0f1866caae0bbc3393a5c9c04504a01716cb",
+  "counting_rules": {
+    "unit": "one imported target package per AST import statement",
+    "module_scope_imports": "included",
+    "function_local_imports": "included",
+    "TYPE_CHECKING_imports": "included",
+    "same_package_imports": "excluded",
+    "third_party_imports": "excluded"
+  },
+  "packages": [
+    "run",
+    "plot",
+    "scan",
+    "oracle",
+    "factories",
+    "data",
+    "util",
+    "config"
+  ],
+  "python_files": 64,
+  "parse_errors": [],
+  "parse_warnings": [
+    {
+      "source_file": "src/contur/run/run_extract_xs_bf_alt.py",
+      "warning": "invalid escape sequence '\\s'"
+    },
+    {
+      "source_file": "src/contur/run/run_extract_xs_bf_alt.py",
+      "warning": "invalid escape sequence '\\s'"
+    },
+    {
+      "source_file": "src/contur/run/run_extract_xs_bf_alt.py",
+      "warning": "invalid escape sequence '\\s'"
+    },
+    {
+      "source_file": "src/contur/run/run_extract_xs_bf_alt.py",
+      "warning": "invalid escape sequence '\\s'"
+    },
+    {
+      "source_file": "src/contur/run/run_mkbib.py",
+      "warning": "invalid escape sequence '\\c'"
+    },
+    {
+      "source_file": "src/contur/run/run_mkbib.py",
+      "warning": "invalid escape sequence '\\_'"
+    },
+    {
+      "source_file": "src/contur/run/run_mkbib.py",
+      "warning": "invalid escape sequence '\\c'"
+    }
+  ],
+  "cross_package_direct_imports": 167,
+  "contexts": {
+    "function": 13,
+    "module": 154
+  },
+  "target_contract_violations": 14,
+  "violation_directions": 8
+}

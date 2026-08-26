@@ -1,0 +1,17 @@
+[tool.importlinter]
+root_package = "contur"
+
+[[tool.importlinter.contracts]]
+id = "proposed-layers"
+name = "proposed layered architecture"
+type = "layers"
+layers = [
+    "contur.run",
+    "contur.plot | contur.scan | contur.oracle",
+    "contur.factories",
+    "contur.data",
+    "contur.database",
+    "contur.util",
+    "contur.config",
+]
+

@@ -1,0 +1,642 @@
+INFO - Contur version 3.1.4
+INFO - See https://hepcedar.gitlab.io/contur-webpage/
+Writing log to contur.log
+INFO - No MySQL configuration file provided, using local database
+INFO - Reading config file config.dat
+INFO - Config file config.dat not found. Falling back to default from /unix/cedar/junyingwu/contur/src/contur/config/default_config.dat
+INFO - Using SM prediction A as default
+INFO - Fit mode detected: signal_strength
+INFO - Using default statistics calculation.
+INFO - Run Information: ====================================== 
+       Contur is running in /unix/cedar/junyingwu/contur_compare/lineprof_single 
+       on analysis objects in ['/unix/cedar/junyingwu/contur/tests/sources/myscan00/13TeV/0000/runpoint_0000.yoda.gz'] 
+       Theory uncertainties assumed uncorrelated. 
+
+INFO - Found 1924 potentially valid histograms in /unix/cedar/junyingwu/contur/tests/sources/myscan00/13TeV/0000/runpoint_0000.yoda.gz
+INFO - Cross section 23.3402 pb, 300.0 generated events
+INFO - Processed ConturPoint , with parameter values: {'CZdL1x1': '0.35406746031746034', 'CZdL3x3': '-0.35406746031746034', 'CZuL1x1': '0.35406746031746034', 'CZuL3x3': '-0.35406746031746034', 'CZuR1x1': '0.35406746031746034', 'CZuR3x3': '-0.35406746031746034', 'cotH': '1.5', 'mZp': '1000.0'}
+     - SMBG=0.9999999992312342 
+     - EXP=0.9999999999919796 
+     - HLEXP=1 
+
+INFO - 
+       Model point sampled at these parameter values:
+     - CZdL1x1 : 0.35406746031746034
+     - CZdL3x3 : -0.35406746031746034
+     - CZuL1x1 : 0.35406746031746034
+     - CZuL3x3 : -0.35406746031746034
+     - CZuR1x1 : 0.35406746031746034
+     - CZuR3x3 : -0.35406746031746034
+     - cotH : 1.5
+     - mZp : 1000.0
+INFO - No match found in the Contur Model database for the model in /unix/cedar/junyingwu/contur_compare/lineprof_single/RunInfo.
+       If you want this to be added, copy the sources files into the contur Models area and remake.
+INFO - Writing summary for grid mode into database: /unix/cedar/junyingwu/contur_compare/lineprof_single/./ANALYSIS/contur_run.db
+INFO - Writing runpoint  to database
+INFO - Run point  written to /unix/cedar/junyingwu/contur_compare/lineprof_single/./ANALYSIS/contur_run.db
+Timer unit: 1e-09 s
+
+Total time: 35.6967 s
+File: /unix/cedar/junyingwu/contur/src/contur/factories/test_observable.py
+Function: __init__ at line 29
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    29                                               def __init__(
+    30                                                       self, 
+    31                                                       ao_path: str,
+    32                                                       ao_type: str,
+    33                                                   ):
+    34                                                   """
+    35                                                   Initialise the class. Uses the path of the :class:`yoda.core.AnalysisObject` to populate observable
+    36                                                   specific attributes from the contur database.
+    37                                           
+    38                                                   :param ao_path: Path of the :class:`yoda.core.AnalysisObject` e.g. "/CMS_2017_I1613982/d01-x01-y01
+    39                                           
+    40                                                                   Used to look up REF and THY data, and populate other attributes from the static DB.
+    41                                           
+    42                                                   :param ao_type: Type of the :class:`yoda.core.AnalysisObject` e.g. "Scatter2D".
+    43                                                                   Has to match the type of the reference analysis object.
+    44                                                   
+    45                                                                   Particularly makes a difference if the ao is a "Profile", where it affects how the signal is 
+    46                                                                   constructed. See details in :class:`contur.factories.likelihood.Likelihood`.
+    47                                                   """
+    48       958    4384067.0   4576.3      0.0          self.signal = Signal()
+    49                                           
+    50                                                   # Measurement
+    51       958     751545.0    784.5      0.0          self._ref = None
+    52                                                   # SM theory
+    53       958     377988.0    394.6      0.0          self._thy = None
+    54                                           
+    55       958     377135.0    393.7      0.0          self.pool = None
+    56                                           
+    57                                                   # check we are using the right HepMC weight (if supplied) and remove it from the path
+    58       958   11786076.0  12302.8      0.0          self._weight = rivet.extractWeightName(ao_path)
+    59       958     898998.0    938.4      0.0          if self._weight != cfg.weight:
+    60                                                       cfg.contur_log.debug(f"{ao_path} weight {self._weight} does not match requested weight {cfg.weight}, skipping")
+    61                                                       return
+    62       958     426415.0    445.1      0.0          self.path = ao_path
+    63       958     571230.0    596.3      0.0          self.type = ao_type
+    64                                           
+    65                                                   # Initialize the public members we always want to access
+    66       958   38866353.0  40570.3      0.1          self._isRatio = cdb.isRatio(self.path)
+    67       958    1299489.0   1356.5      0.0          self._isProfile = self.type.startswith("Profile")
+    68       958   34144895.0  35641.9      0.1          self._isSearch = cdb.isSearch(self.path)
+    69       958     771810.0    805.6      0.0          self._stack_smbg = yoda.Scatter2D
+    70       958     483581.0    504.8      0.0          self._stack_databg = yoda.Scatter2D
+    71                                           
+    72                                                   # these should just be used for plotting, which is not done if writer is silenced (e.g. in gridMode)
+    73       958     428440.0    447.2      0.0          self._refplot = None
+    74       958     403429.0    421.1      0.0          self._sigplot = None
+    75       958     428746.0    447.5      0.0          self._thyplot = None
+    76                                           
+    77       958     431625.0    450.5      0.0          self._lumi = 1
+    78       958     399817.0    417.3      0.0          self._lumi_fb = 1
+    79       958     425545.0    444.2      0.0          self._isScaled = False
+    80       958     374880.0    391.3      0.0          self._scaleFactorData = 1
+    81       958     419605.0    438.0      0.0          self._nev_differential = 1.0
+    82       958     395168.0    412.5      0.0          self._likelihood = None
+    83                                           
+    84       958     426335.0    445.0      0.0          self.measured_values = None
+    85       958     405690.0    423.5      0.0          self.sm_values = None
+    86       958     399239.0    416.7      0.0          self.expected_values = None
+    87                                           
+    88       958     424743.0    443.4      0.0          self.sm_prediction = None
+    89                                           
+    90                                                   # Call the internal functions on initialization
+    91                                                   # to fill the above members with what we want, these should all be private
+    92                                           
+    93       958  377979240.0 394550.4      1.1          self.__getAux()
+    94       958     495452.0    517.2      0.0          if self.pool is None:
+    95                                                       return
+    96                                           
+    97                                                   # Get the measurement reference data.
+    98       958     1.89e+10 1.97e+07     52.8          if not self.__getData():
+    99                                                       return
+   100                                           
+   101                                                   # Get the theory reference data, if present, and set the appropriate
+   102                                                   # convenience flag if successful.
+   103       958 5931908948.0 6.19e+06     16.6          self.__getThy()
+   104       958     704218.0    735.1      0.0          self._useTheory = self.sm_values is not None
+   105                                           
+   106                                           
+   107       958   59803867.0  62425.7      0.2          self.__getisScaled()
+   108                                           
+   109                                                   # build the expected values (SM theory with data uncertainties)
+   110       958     1.04e+10 1.08e+07     29.0          self.__getExpected()
+
+Total time: 10.3573 s
+File: /unix/cedar/junyingwu/contur/src/contur/factories/test_observable.py
+Function: __getExpected at line 172
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   172                                               def __getExpected(self):
+   173                                                   """
+   174                                                   Internal function to get the expected values (SM cental values with data uncertainty)
+   175                                           
+   176                                                   :Modified members:
+   177                                                       - *expected_values* (:class:yoda.core.Scatter2D) --
+   178                                                         Reference scatter plot matching path from input signal aos
+   179                                           
+   180                                                   """
+   181                                           
+   182                                                   # can't do this if we don't have a theory prediction!
+   183       958     884450.0    923.2      0.0          if self.sm_values is None:
+   184        64      15177.0    237.1      0.0              return
+   185                                           
+   186       894 2501815795.0  2.8e+06     24.2          self._expected = self._ref.clone()
+   187     10718  348730268.0  32536.9      3.4          for i in range(0, len(self._expected.points())):
+   188      9824 7469760654.0 760358.4     72.1              self._expected.points()[i].setY(self._thy.points()[i].y())
+   189                                           
+   190                                           
+   191       894     747906.0    836.6      0.0          if self.measured_values.covariance_matrix is not None:
+   192       489    2990046.0   6114.6      0.0              cov = self.measured_values.covariance_matrix.copy()
+   193       489   20334868.0  41584.6      0.2              errs = self.measured_values.err_breakdown.copy()
+   194                                                   else:
+   195       405     140763.0    347.6      0.0              cov = None
+   196       405     131895.0    325.7      0.0              errs = None
+   197                                           
+   198                                           
+   199      1788    5261908.0   2942.9      0.1          self.expected_values = ObservableValues(
+   200       894    2671271.0   2988.0      0.0              central_values=self.sm_values.central_values.copy(),
+   201       894     289952.0    324.3      0.0              err_breakdown=errs, 
+   202       894     278873.0    311.9      0.0              covariance_matrix=cov,
+   203       894    3256902.0   3643.1      0.0              diagonal_matrix=self.measured_values.diagonal_matrix.copy()
+   204                                                   )
+
+Total time: 18.85 s
+File: /unix/cedar/junyingwu/contur/src/contur/factories/test_observable.py
+Function: __getData at line 131
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   131                                               def __getData(self):
+   132                                                   """
+   133                                                   Internal function to look up the refdata
+   134                                           
+   135                                                   :Built members:
+   136                                                       - *ref* (:class:YODA.Scatter2D) --
+   137                                                         Reference scatter plot matching path from input signal aos
+   138                                                       - *measured_values* (:class:ObservableValues) --
+   139                                                         central values, covariance etc for the measurement
+   140                                                   """
+   141       958   42588232.0  44455.4      0.2          ref_path = "/REF" + rivet.stripOptions(self.path)
+   142                                           
+   143       958  212644837.0 221967.5      1.1          if ref_path not in state.refObj:
+   144                                                       return False
+   145                                                   
+   146       958    1010352.0   1054.6      0.0          self._ref = state.refObj[ref_path]
+   147                                           
+   148       958     290803.0    303.6      0.0          try:
+   149       958 5964194604.0 6.23e+06     31.6              cov = state.refCorr[ref_path].copy()
+   150       958 7205152194.0 7.52e+06     38.2              nuisErrs = state.refErrors[ref_path].copy()
+   151       540    6284149.0  11637.3      0.0              cfg.contur_log.debug("Attempting to use correlation info for {}".format(self.path))
+   152       418     328768.0    786.5      0.0          except Exception as e:
+   153       418    3034377.0   7259.3      0.0              cfg.contur_log.debug("No correlation info for {}".format(self.path))
+   154       418     389510.0    931.8      0.0              cov = None
+   155       418     363002.0    868.4      0.0              nuisErrs = None
+   156       958     336350.0    351.1      0.0          try:
+   157       958 2877133569.0    3e+06     15.3              uncov = state.refUncorr[ref_path].copy()
+   158                                                   except:
+   159                                                       uncov = None
+   160                                                       return False
+   161                                           
+   162      1916    5771919.0   3012.5      0.0          self.measured_values = ObservableValues(
+   163       958 2529167812.0 2.64e+06     13.4              central_values=self._ref.yVals(), 
+   164       958     412569.0    430.7      0.0              err_breakdown=nuisErrs,
+   165       958     341338.0    356.3      0.0              covariance_matrix=cov, 
+   166       958     299057.0    312.2      0.0              diagonal_matrix=uncov
+   167                                                   )
+   168                                           
+   169       958     289061.0    301.7      0.0          return True
+
+Total time: 5.92503 s
+File: /unix/cedar/junyingwu/contur/src/contur/factories/test_observable.py
+Function: __getThy at line 206
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   206                                               def __getThy(self):
+   207                                                   """
+   208                                                   Internal function to look up the SM theory data
+   209                                           
+   210                                                   :Built members:
+   211                                                       * *_theoryComp* (``bool``) --
+   212                                                         True if this histogram always requires an SM theory comparison
+   213                                           
+   214                                                       * *thy* (:class:YODA.Scatter2D) --
+   215                                                         SM Theory prediction matching path from input signal aos
+   216                                           
+   217                                                       * *sm_values* (:class:ObservableValues) --
+   218                                                         correlation matrix, central values etc for the SM theory prediction
+   219                                           
+   220                                                   """
+   221                                           
+   222                                                   # find whether theory is always required for this histogram
+   223       958   39126894.0  40842.3      0.7          self._theoryComp = cdb.theoryComp(self.path)
+   224                                           
+   225                                                   # if the SM prediction was not already set, try to populate it.
+   226       958     284460.0    296.9      0.0          try:
+   227       958     506703.0    528.9      0.0              if self.sm_prediction is None:
+   228       958    1022339.0   1067.2      0.0                  self.sm_prediction = state.sm_prediction[self.analysis.name]
+   229                                           
+   230       958     772296.0    806.2      0.0              path = "/THY"+self.path
+   231       958 2076199778.0 2.17e+06     35.0              self._thy = self.sm_prediction.ao[path].clone()
+   232                                           
+   233        64      40797.0    637.5      0.0          except KeyError:
+   234                                                       # no SM prediction for this plot.
+   235        64      38673.0    604.3      0.0              return
+   236                                           
+   237       894     356043.0    398.3      0.0          try:
+   238       894 1930984663.0 2.16e+06     32.6              thCov = self.sm_prediction.corr[self._thy.path()].copy()
+   239       894   43134766.0  48249.2      0.7              thErrs = self.sm_prediction.errors[self._thy.path()].copy()
+   240       893     351022.0    393.1      0.0          except:
+   241       893     960771.0   1075.9      0.0              thCov = None
+   242       893     743096.0    832.1      0.0              thErrs = None
+   243       894     306218.0    342.5      0.0          try:
+   244       894 1648066137.0 1.84e+06     27.8              thUncov = self.sm_prediction.uncorr[self._thy.path()].copy()
+   245                                                   except KeyError:
+   246                                                       thUncov = None
+   247                                                       # just warn if we can't build theory, it's less important...
+   248                                                       cfg.contur_log.warning(
+   249                                                           "Could not build any theory error source for %s" % self.path)
+   250                                           
+   251      1788    5542048.0   3099.6      0.1          cfg.contur_log.debug(
+   252       894    4629051.0   5177.9      0.1                  "Using theory for {}".format(self._thy.path()))
+   253                                           
+   254      1788  171634563.0  95992.5      2.9          self.sm_values = ObservableValues(central_values=self._thy.yVals(), err_breakdown=thErrs,
+   255       894     331660.0    371.0      0.0                                            covariance_matrix=thCov, diagonal_matrix=thUncov )
+
+Total time: 0.375214 s
+File: /unix/cedar/junyingwu/contur/src/contur/factories/test_observable.py
+Function: __getAux at line 295
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   295                                               def __getAux(self):
+   296                                                   """Internal function to look up auxiliary attributes from the contur database
+   297                                           
+   298                                                   :Built members:
+   299                                                       - *analysis* (:class:`contur.data.analysis.Analysis`) --
+   300                                                           Analysis object associated with this observable
+   301                                                       - *histo_name* (``string``) --
+   302                                                           Name of the histogram within the analysis e.g. "d01-x01-y01"
+   303                                                       - *pool* (``string``) --
+   304                                                         String for analysis pool looked up from contur database
+   305                                                       - *mergedhisto* (``string``) --
+   306                                                         String for analysis mergedhisto looked up from contur database (None if the histo doesn't belong for a mergedhisto)
+   307                                                       - *lumi* (``float``) --
+   308                                                           Integrated luminosity associated with this histogram, in the units used by the analysis
+   309                                                       - *lumi_fb* (``float``) --
+   310                                                           Integrated luminosity associated with this histogram, in inverse femtobarns
+   311                                                   """
+   312       958   31544468.0  32927.4      8.4          _ana_name, self.histo_name = cutil.splitPath(self.path)
+   313                                           
+   314       958  343669376.0 358736.3     91.6          self.analysis, self._lumi, self._lumi_fb, self.pool, self.mergedhisto = cdb.obsFinder(self.path)
+
+Total time: 6.61198 s
+File: /unix/cedar/junyingwu/contur/src/contur/factories/test_observable.py
+Function: add_signal_component at line 404
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   404                                               def add_signal_component(self, ao, xsec, nev, parameters):
+   405                                                   """
+   406                                                   Dress a :class:`YODA.AnalysisObject` into an ObservableValues and add it as a component of the BSM signal
+   407                                                   """
+   408                                           
+   409                                                   # if everything we need is available, there will be ref data.
+   410       958  163994054.0 171183.8      2.5          if not self._ref:
+   411                                                       cfg.contur_log.warning("No reference data found for histo: {}".format(self.path))
+   412                                                       return
+   413                                                   
+   414       958    2750479.0   2871.1      0.0          if ao.type() != self.type:
+   415                                                       cfg.contur_log.warning(f"Signal AO type {ao.type()} does not match expected type {self.type} for observable {self.path}, skipping")
+   416                                                       return
+   417                                                   
+   418       958  694350275.0 724791.5     10.5          if len(self._ref.points()) != len(ao.points()):
+   419                                                       cfg.contur_log.error(f"REF data and signal for {self.path} have unequal numbers of points ({len(self._ref.points())} vs {len(ao.points())})")
+   420                                                       raise RuntimeError(f"REF data and signal for {self.path} have unequal numbers of points ({len(self._ref.points())} vs {len(ao.points())})")
+   421                                           
+   422                                                   # scale the signal if needed
+   423       958    2292184.0   2392.7      0.0          if ao.type() in ['Histo1D', 'Profile1D', 'Scatter2D']:
+   424                                           
+   425       958     318896.0    332.9      0.0              scaleFactorSig = 1.0
+   426       958     551504.0    575.7      0.0              if self._isScaled and xsec is not None:
+   427                                                           # if the plot is area normalised (ie scaled), work out the factor from number of events and generator xs
+   428                                                           # (this is just the integrated cross section associated with the plot)
+   429                                                           # TODO: should maybe be using effNumEntries to correctly handle weighted events?
+   430       159      46792.0    294.3      0.0                  try:
+   431       159  194211481.0 1.22e+06      2.9                      if ao.annotation("ScaledBy", 1.0) != 0.0:
+   432       102   66426756.0 651242.7      1.0                          scaleFactorSig = xsec*ao.annotation("ScaledBy", 1.0)/float(nev)
+   433                                                               else:
+   434        57     534044.0   9369.2      0.0                          cfg.contur_log.debug("Likely empty signal histo: {}".format(ao.path()))
+   435                                                           except Exception as e:
+   436                                                               cfg.contur_log.warn("missing info for scalefactor calc", exc_info=e)
+   437                                                               scaleFactorSig = 1.0
+   438                                           
+   439                                                       # scale in place
+   440       958  640071242.0 668132.8      9.7              self.__doScale(ao, scaleFactorSig)
+   441                                           
+   442       958     488756.0    510.2      0.0          signal_err_breakdown = {}
+   443                                                   # after scaling, grab the MC stat errors
+   444                                                   # TODO: signal errors are symmetrised here. Does that make any difference? (should not)
+   445       958  277279246.0 289435.5      4.2          signal_err_breakdown["mc_stat"] = np.array([(abs(epair[0]) + abs(epair[1]))*0.5 for epair in ao.yErrs()])
+   446                                           
+   447       958     850486.0    887.8      0.0          if cfg.add_sqrt_evtcount_signal_error:
+   448                                                       # get expected-events uncertainty (Poisson)
+   449                                                       # overwrites the ao errors, but reuses the existing helper.
+   450       958 4131933139.0 4.31e+06     62.5              root_n_errors(ao, self._isSearch, nx=self._nev_differential, lumi=self._lumi, replace=True)
+   451      1916    4957482.0   2587.4      0.1              signal_err_breakdown["expected_events_err"] = np.array(
+   452       958  200840441.0 209645.6      3.0                  [(abs(epair[0]) + abs(epair[1])) * 0.5 for epair in ao.yErrs()]
+   453                                                       )
+   454                                                   else:
+   455                                                       # the "expected_events_err" key is expected in Signal, so fill with zeroes
+   456                                                       signal_err_breakdown["expected_events_err"] = np.zeros_like(
+   457                                                           signal_err_breakdown["mc_stat"], dtype=float
+   458                                                       )
+   459                                                   
+   460       958  171974117.0 179513.7      2.6          values = ObservableValues(central_values=ao.yVals(), err_breakdown=signal_err_breakdown)
+   461                                           
+   462       958   58106426.0  60653.9      0.9          self.signal.add_component(values=values, xsec=xsec, scale_factor=scaleFactorSig, parameters=parameters)
+
+Total time: 3.44392 s
+File: /unix/cedar/junyingwu/contur/src/contur/factories/test_observable.py
+Function: build_likelihood at line 464
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   464                                               def build_likelihood(self, smtest=False):
+   465                                                   """
+   466                                                   Build an internal :class:`~contur.factories.likelihood.Likelihood` object for this observable
+   467                                                   """
+   468                                           
+   469       958     620314.0    647.5      0.0          if smtest:
+   470                                                       sm_values = self.get_zero_values()
+   471                                                       sxsec = None
+   472                                                   else:
+   473       958     422583.0    441.1      0.0              sm_values = self.sm_values
+   474       958    1319332.0   1377.2      0.0              sxsec=self.signal.components[0].scale_factor, # TODO: this should be per-component
+   475                                           
+   476      1916 3436598525.0 1.79e+06     99.8          self._likelihood = lh.Likelihood(
+   477       958     294569.0    307.5      0.0              calculate=True,
+   478       958     360102.0    375.9      0.0              ratio=self._isRatio,
+   479       958     356508.0    372.1      0.0              lumi=self._lumi,
+   480       958     333579.0    348.2      0.0              lumi_fb=self._lumi_fb,
+   481       958     340167.0    355.1      0.0              profile=self._isProfile,
+   482       958     261298.0    272.8      0.0              sxsec=sxsec,
+   483       958     351751.0    367.2      0.0              bxsec=self._scaleFactorData,
+   484       958     360895.0    376.7      0.0              tags=self.path,
+   485       958     330699.0    345.2      0.0              measured_values=self.measured_values,
+   486       958     286114.0    298.7      0.0              sm_values=sm_values,
+   487       958     326584.0    340.9      0.0              bsm_values=self.signal,
+   488       958     371062.0    387.3      0.0              expected_values=self.expected_values,
+   489       958     342559.0    357.6      0.0              pools=self.pool,
+   490       958     371742.0    388.0      0.0              mergedhistos=self.mergedhisto,
+   491       958     274713.0    286.8      0.0              smtest=smtest,
+   492                                                   )
+
+Total time: 465.234 s
+File: /unix/cedar/junyingwu/contur/src/contur/run/run_analysis.py
+Function: main at line 244
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   244                                           def main(args):
+   245                                               """
+   246                                               Main programme to run contur analysis on a grid of YODA files, a single YODA, or a YODA stream.
+   247                                               arguments should be passed as a dictionary.
+   248                                               """
+   249                                           
+   250                                               # Set up / respond to the common argument flags and logger config
+   251         1    3776369.0 3.78e+06      0.0      cau.setup_common(args) 
+   252         1       9853.0   9853.0      0.0      print("Writing log to {}".format(cfg.logfile_name))
+   253                                               # Set up mysql
+   254         1     156202.0 156202.0      0.0      cau.setup_mysql(args)
+   255                                           
+   256                                               # Set the config file
+   257         1        848.0    848.0      0.0      cfg.config_file = args['CONFIG']
+   258                                           
+   259         1        541.0    541.0      0.0      if 'YODASTREAM' not in args:
+   260         1        544.0    544.0      0.0          args['YODASTREAM'] = None
+   261                                           
+   262         1        800.0    800.0      0.0      cfg.nostack = args['NOSTACK']
+   263                                                   
+   264         1        857.0    857.0      0.0      cfg.grid = args['GRID']
+   265         1       1835.0   1835.0      0.0      cfg.mceg_options[cfg.madgraph]["keep_hepmc"] = args['KEEPHEPMC']
+   266                                               
+   267         1        292.0    292.0      0.0      modeMessage =  "Run Information: ====================================== \n"
+   268         1       8515.0   8515.0      0.0      modeMessage += "       Contur is running in {} \n".format(os.getcwd())
+   269                                           
+   270                                               # make the output directory if it isn't already there.
+   271         1   18479296.0 1.85e+07      0.0      cutil.mkoutdir(cfg.output_dir)
+   272                                               
+   273                                               # do we want csv file output?
+   274         1       1095.0   1095.0      0.0      if args['CSVFILE'] is not None:
+   275                                                   cfg.csvfile = os.path.join(cfg.output_dir,args['CSVFILE'])
+   276                                           
+   277         1       1230.0   1230.0      0.0      if cfg.grid:
+   278                                                   modeMessage += "       on files in {} \n".format(cfg.grid)
+   279                                                   cfg.gridMode = True
+   280                                           
+   281                                                   # turn off writing on plotting script if requested
+   282                                                   cfg.silenceWriter = not args["PYSCRIPTS"]
+   283                                                   
+   284         1        689.0    689.0      0.0      elif args['YODASTREAM'] is None:
+   285         1      13537.0  13537.0      0.0          modeMessage += "       on analysis objects in {} \n".format(args['yodafiles'])
+   286         1       1723.0   1723.0      0.0          cfg.gridMode = False
+   287                                                   
+   288                                               else:
+   289                                                   modeMessage += "       on analysis objects in YODASTREAM StringIO \n"
+   290                                                   cfg.gridMode = False
+   291                                                   if not args.get('UNSILENCE_WRITER_FOR_STREAMS', False):
+   292                                                       cfg.silenceWriter=True
+   293                                           
+   294         1        831.0    831.0      0.0      if "RESULTS" in args:
+   295         1        939.0    939.0      0.0          cfg.results_dbfile = args["RESULTS"]
+   296         1      19020.0  19020.0      0.0      cfg.results_dbfile = os.path.join(cfg.output_dir,cfg.results_dbfile)
+   297                                           
+   298         1        649.0    649.0      0.0      if args['ADD_DB']:
+   299                                                   cfg.add_to_results_db = True
+   300                                                   
+   301         1     164514.0 164514.0      0.0      elif (os.path.exists(cfg.results_dbfile) and args['YODASTREAM'] is None):
+   302                                                   cfg.contur_log.info("Removing previous results {}".format(cfg.results_dbfile))
+   303                                                   os.remove(cfg.results_dbfile)
+   304                                               
+   305         1      26416.0  26416.0      0.0      cfg.models_dbfile = os.path.join(cfg.share,cfg.models_dbfile)
+   306                                           
+   307                                               # set up the plot output directory
+   308         1      10578.0  10578.0      0.0      cfg.plot_dir = os.path.join(cfg.output_dir,"plots")
+   309                                           
+   310                                               # set up the data selection options.
+   311         1       9880.0   9880.0      0.0      modeMessage = cau.setup_selection(args,modeMessage)
+   312                                           
+   313         1        659.0    659.0      0.0      if (not args['yodafiles'] and not cfg.gridMode and (args['YODASTREAM'] is None)):
+   314                                                   cfg.contur_log.critical("Error: You need to specify some YODA files to be "
+   315                                                                         "analysed!\n")
+   316                                                   sys.exit(1)
+   317                                           
+   318         1       1961.0   1961.0      0.0      if (not args.get('UNSILENCE_WRITER_FOR_STREAMS', False)) and args.get('OUTPUTDIR') is None:
+   319                                                   cfg.contur_log.critical("Error: If you wish to output plot files running on a "
+   320                                                   "yoda stream, you must specify an OUTPUTDIR")
+   321                                                   sys.exit(1)
+   322                                           
+   323         1        897.0    897.0      0.0      if args['WEIGHTNAME'] is not None:
+   324         1       1173.0   1173.0      0.0          cfg.weight = args['WEIGHTNAME']
+   325                                           
+   326                                               # Set the global args used in config.py
+   327         1        722.0    722.0      0.0      if args['PARAM_FILE']:
+   328         1       1185.0   1185.0      0.0          cfg.param_steering_file = args['PARAM_FILE']
+   329                                           
+   330         1      16647.0  16647.0      0.0      modeMessage = cau.setup_stats(args, modeMessage)
+   331                                           
+   332         1     230628.0 230628.0      0.0      cfg.contur_log.info("Reading config file {}".format(cfg.config_file))
+   333         2    4331906.0 2.17e+06      0.0      cfr.read_config_file(
+   334         1        586.0    586.0      0.0          cfg.config_file,
+   335         1        430.0    430.0      0.0          configure_uncertainties=True,
+   336         1        373.0    373.0      0.0          configure_signal_components=True,
+   337         1        508.0    508.0      0.0          configure_parameters_block=True,
+   338         1        415.0    415.0      0.0          configure_theory=True,
+   339         1        439.0    439.0      0.0          configure_calculation=True,
+   340                                               )
+   341                                           
+   342         1       1034.0   1034.0      0.0      if args['ANAPATTERNS']:
+   343                                                   cfg.onlyAnalyses = args['ANAPATTERNS']
+   344                                                   modeMessage += f"Only using analysis objects whose path includes {args['ANAPATTERNS']}. \n"  
+   345         1        641.0    641.0      0.0      if args['ANAUNPATTERNS']:
+   346                                                   cfg.vetoAnalyses = args['ANAUNPATTERNS']
+   347                                                   modeMessage += f"Excluding analyses names: {args['ANAUNPATTERNS']}. \n"
+   348                                           
+   349         1        553.0    553.0      0.0      if args['BINWIDTH']:
+   350                                                   cfg.binwidth = float(args['BINWIDTH'])
+   351         1        544.0    544.0      0.0      if args['BINOFFSET']:
+   352                                                   cfg.binoffset = float(args['BINOFFSET'])
+   353         1        671.0    671.0      0.0      if args['MODEL']:
+   354                                                   modeMessage += '\n Model: ' + args['MODEL']
+   355                                                   cfg.contur_log.info('\n Model: ' + args['MODEL'])
+   356                                           
+   357         1       1116.0   1116.0      0.0      if args.get('NOPOOLS'):
+   358                                                   cfg.contur_log.warning("Running assuming all histograms are statistically independent. This will overestimate exclusions.")
+   359                                                   cfg.no_pools = True
+   360                                           
+   361         1     150294.0 150294.0      0.0      cfg.contur_log.info(modeMessage)
+   362                                           
+   363                                               # rather than porting arguments though class instance initialisations, instead set these as variables in the global config.py
+   364                                               # all these are imported on import contur so set them here and pick them up when needed later
+   365                                           
+   366         1        911.0    911.0      0.0      if cfg.gridMode:
+   367                                                   process_grid(args)
+   368                                           
+   369         1        785.0    785.0      0.0      elif (args['YODASTREAM'] is None):
+   370                                                   # single mode
+   371                                                   # --------------------------------------------------------------------------------------------------
+   372                                           
+   373                                                   # find the specified parameter point.
+   374         2      10641.0   5320.5      0.0          yodaFiles = cgt.find_param_point(
+   375         1        929.0    929.0      0.0              args['yodafiles'], args['TAG'], args['FINDPARAMS'])
+   376                                                   
+   377         2       2704.0   1352.0      0.0          for infile in yodaFiles:     
+   378         1    1693315.0 1.69e+06      0.0              if not os.path.exists(infile):
+   379                                                           cfg.contur_log.critical("{} does not exist".format(infile))
+   380                                                           sys.exit(1)
+   381                                           
+   382                                                       # get info from paramfile if it is there
+   383         2      15296.0   7648.0      0.0              param_file_path = os.path.join(
+   384         1      16389.0  16389.0      0.0                  os.path.dirname(infile), cfg.paramfile)
+   385         1     158129.0 158129.0      0.0              if os.path.exists(param_file_path):
+   386         1   20725179.0 2.07e+07      0.0                  params = cfr.read_param_point(param_file_path)
+   387         1       1110.0   1110.0      0.0                  modeMessage = '\n       Model point sampled at these parameter values:'
+   388         9       7868.0    874.2      0.0                  for param, val in params.items():
+   389         8      34753.0   4344.1      0.0                      modeMessage += "\n     - {} : {}".format(param,str(val))
+   390                                                       else:
+   391                                                           params = {}
+   392                                                           params["No parameters specified"] = 0.0
+   393                                                           modeMessage = "\n       Parameter values not known for this run."
+   394                                           
+   395                                           
+   396                                                       # If requested, grab some values from the log file and add them as extra parameters.
+   397         1        575.0    575.0      0.0              root = "."
+   398                                           
+   399         1        644.0    644.0      0.0              tmp_params = {}
+   400         9       5849.0    649.9      0.0              for param, val in params.items():
+   401         8       5789.0    723.6      0.0                  if args['SLHA'] and param=="slha_file":
+   402                                                               block_list = args['SLHA'].split(",")
+   403                                                               # read parameters from blocks in an SLHA file
+   404                                                               block_dict = cfr.read_slha_file(root, val, block_list)
+   405                                                               for block in block_list:
+   406                                                                   tmp_params.update(block_dict[block])
+   407                                           
+   408         1       1525.0   1525.0      0.0              params.update(tmp_params)
+   409                                           
+   410         1     384743.0 384743.0      0.0              files = os.listdir(root)
+   411                                           
+   412                                                       # If requested, grab some values from the generator log files and add them as extra parameters.
+   413         1       9601.0   9601.0      0.0              params.update(cfr.get_generator_values(root, files, args['ME'],args['PI']))
+   414                                           
+   415                                                       # read the yodafile, do the comparison
+   416         1        806.0    806.0      0.0              try:
+   417         1      22632.0  22632.0      0.0                  point = ConturPoint("", yoda_paths=[infile], parameter_values=params, signal_config=state.signal_config)
+   418         1     4.65e+11 4.65e+11     99.9                  point.process()
+   419                                                       except ValueError as ve:
+   420                                                           cfg.contur_log.warning("Failed to add parameter point {}, no likelihoods present. YODA file is {}.".format(params,infile))
+   421                                                           raise
+   422                                           
+   423         1     982251.0 982251.0      0.0              cfg.contur_log.info(modeMessage)
+   424         1  298747134.0 2.99e+08      0.1              model_id, map_id, addition_argument = prepare_output_db(args)
+   425         1  144734044.0 1.45e+08      0.0              write_point(point, model_id, map_id, addition_argument)
+   426                                           
+   427         1       2659.0   2659.0      0.0              if cfg.csvfile is not None:
+   428                                                           depot = Depot()
+   429                                                           depot.add_processed_point(point)
+   430                                                           depot.export(cfg.csvfile)
+   431                                           
+   432                                               else:
+   433                                                   # single mode, but run from YODA stream
+   434                                                   # --------------------------------------------------------------------------------------------------
+   435                                           
+   436                                                   params = {}
+   437                                                   params["No parameters specified"] = 0.0
+   438                                                   modeMessage = "       Parameter values not known for this run."
+   439                                           
+   440                                                   # If requested, grab some values from the log file and add them as extra parameters.
+   441                                                   root = "."
+   442                                                   files = os.listdir(root)
+   443                                           
+   444                                                   # If requested, grab some values from the generator log files and add them as extra parameters.
+   445                                                   params.update(cfr.get_generator_values(root, files, args['ME'],args['PI']))
+   446                                           
+   447                                                   # read the yodafile, do the comparison
+   448                                                   try:
+   449                                                       point = ConturPoint("", yodastream=args['YODASTREAM'], parameter_values=params, signal_config=state.signal_config)
+   450                                                       point.process()
+   451                                                   except ValueError as ve:
+   452                                                       cfg.contur_log.warning("Failed to add parameter point {}, no likelihoods present.".format(params))
+   453                                           
+   454                                                   cfg.contur_log.info(modeMessage)
+   455                                                   output_options = args.get('YODASTREAM_API_OUTPUT_OPTIONS', [])
+   456                                                   return point.write_summary_dict(output_options)
+
+	Command being timed: "python ../profile_test_observable_lines.py --nomultip /unix/cedar/junyingwu/contur/tests/sources/myscan00/13TeV/0000/runpoint_0000.yoda.gz"
+	User time (seconds): 361.18
+	System time (seconds): 35.55
+	Percent of CPU this job got: 78%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 8:26.14
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3198016
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 18071
+	Minor (reclaiming a frame) page faults: 1907059
+	Voluntary context switches: 60466
+	Involuntary context switches: 10511
+	Swaps: 0
+	File system inputs: 745104
+	File system outputs: 44880
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

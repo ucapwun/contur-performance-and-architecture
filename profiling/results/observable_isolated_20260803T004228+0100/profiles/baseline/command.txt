@@ -1,0 +1,1 @@
+python -m cProfile -o /unix/cedar/junyingwu/contur_compare/dissertation_runs/observable_isolated_20260803T004228+0100/profiles/baseline/profile.prof /unix/cedar/junyingwu/dissertation_worktrees/observable_before_20260803/bin/contur -g /unix/cedar/junyingwu/contur_compare/grid_snapshot --nomultip 

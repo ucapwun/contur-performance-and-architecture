@@ -1,0 +1,60 @@
+Mon Aug  3 01:47:22 2026    /unix/cedar/junyingwu/contur_compare/dissertation_runs/observable_isolated_20260803T004228+0100/profiles/baseline/profile.prof
+
+         1156920804 function calls (1141032509 primitive calls) in 831.269 seconds
+
+   Ordered by: cumulative time
+   List reduced from 6217 to 50 due to restriction <50>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   1405/1    0.031    0.000  832.297  832.297 {built-in method builtins.exec}
+        1    0.000    0.000  832.297  832.297 contur:3(<module>)
+        1    0.039    0.039  818.979  818.979 run_analysis.py:244(main)
+        1    0.010    0.010  818.923  818.923 run_analysis.py:134(process_grid)
+      100    1.034    0.010  731.413    7.314 run_analysis.py:103(process_runpoint)
+      100    1.488    0.015  730.378    7.304 contur_point.py:243(process)
+      100    1.133    0.011  614.541    6.145 contur_point.py:176(build_observables)
+   120500    0.901    0.000  334.119    0.003 test_observable.py:29(__init__)
+6838490/6837091   19.248    0.000  331.646    0.000 <frozen importlib._bootstrap>:1002(_find_and_load)
+   120500   72.202    0.001  300.498    0.002 test_observable.py:172(__getExpected)
+6838460/6837091   17.107    0.000  246.682    0.000 <frozen importlib._bootstrap>:967(_find_and_load_unlocked)
+   120500   10.516    0.000  224.573    0.002 test_observable.py:404(add_signal_component)
+  6838444   31.501    0.000  220.489    0.000 <frozen importlib._bootstrap>:901(_find_spec)
+  6838441    4.533    0.000  165.942    0.000 <frozen importlib._bootstrap_external>:1415(find_spec)
+  6838441   14.459    0.000  161.409    0.000 <frozen importlib._bootstrap_external>:1383(_get_spec)
+8824755/8325171   11.111    0.000  155.103    0.000 {method 'format' of 'str' objects}
+   120500   11.131    0.000  153.140    0.001 yoda_factories.py:303(root_n_errors)
+   718402    0.945    0.000  143.386    0.000 arrayprint.py:1595(_array_str_implementation)
+   718384    2.060    0.000  142.441    0.000 arrayprint.py:561(array2string)
+  6839679   40.097    0.000  137.376    0.000 <frozen importlib._bootstrap_external>:1514(find_spec)
+   718402    1.821    0.000  136.121    0.000 arrayprint.py:506(wrapper)
+   718384    3.679    0.000  133.635    0.000 arrayprint.py:523(_array2string)
+   121705    0.452    0.000   76.400    0.001 yoda_factories.py:93(load_bg_data)
+      100    0.069    0.001   74.357    0.744 contur_point.py:252(<listcomp>)
+   120500    0.080    0.000   74.288    0.001 test_observable.py:494(likelihood)
+   120500    0.470    0.000   74.209    0.001 test_observable.py:464(build_likelihood)
+   124100    0.703    0.000   73.801    0.001 likelihood.py:51(__init__)
+       70    5.596    0.080   72.787    1.040 yoda_factories.py:161(load_ref_aos)
+   718384    0.754    0.000   68.681    0.000 arrayprint.py:780(_formatArray)
+13819490/718384   25.102    0.000   67.928    0.000 arrayprint.py:789(recurser)
+     4815    0.055    0.000   66.737    0.014 yoda_factories.py:179(load_ref_ao)
+   718384    3.009    0.000   61.106    0.000 arrayprint.py:452(_get_format_function)
+   718384    0.955    0.000   56.477    0.000 arrayprint.py:411(<lambda>)
+   718384    1.922    0.000   55.522    0.000 arrayprint.py:907(__init__)
+   120500    0.896    0.000   55.376    0.000 likelihood.py:137(__build_stats)
+      300    0.002    0.000   54.477    0.182 contur_point.py:161(load_aos)
+      300    0.895    0.003   54.474    0.182 yoda_factories.py:396(__init__)
+      300    0.422    0.001   53.580    0.179 yoda_factories.py:405(__read_yoda_file)
+   718384   18.092    0.000   53.218    0.000 arrayprint.py:934(fillFormat)
+    89349    1.493    0.000   46.233    0.001 likelihood.py:364(__chisq)
+  6842848    2.448    0.000   44.628    0.000 <frozen importlib._bootstrap_external>:135(_path_stat)
+ 34198904   17.490    0.000   44.508    0.000 <frozen importlib._bootstrap_external>:121(_path_join)
+  6845297   42.211    0.000   42.211    0.000 {built-in method posix.stat}
+     5390    0.291    0.000   41.866    0.008 build_covariance.py:16(__init__)
+  6838490    4.719    0.000   40.343    0.000 <frozen importlib._bootstrap>:156(__enter__)
+   126705    0.531    0.000   33.678    0.000 yoda_factories.py:24(mkConturFriendlyScatter)
+   126705    4.585    0.000   31.555    0.000 utils.py:117(mkPlotFriendlyScatter)
+    37773    0.039    0.000   29.789    0.001 __init__.py:97(full_load)
+    37773    0.149    0.000   29.750    0.001 __init__.py:74(load)
+    37773    0.033    0.000   29.057    0.001 constructor.py:47(get_single_data)
+
+
