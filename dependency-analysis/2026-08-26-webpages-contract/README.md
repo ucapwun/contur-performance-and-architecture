@@ -15,6 +15,6 @@ The saved contract adds four points that were absent from the earlier snapshot:
 - a protected contract permits direct imports of `contur.database` only from `contur.data`;
 - the CI job installs `import-linter>=2.5,<2.6` before running `lint-imports --verbose`.
 
-The CI job remained non-blocking through `allow_failure: true`. The file
-`import-linter-contract.toml` is the exact Import Linter section extracted from `pyproject.toml` at
-the recorded commit.
+The CI job remained non-blocking through `allow_failure: true`.
+`import-linter-contract.toml` is the exact Import Linter section extracted from `pyproject.toml`,
+and `import-linter-ci.yml` is the exact job extracted from `.gitlab-ci.yml` at the recorded commit.

@@ -1,0 +1,9 @@
+import-linter:
+  stage: Test
+  image: python:3.9
+  variables:
+    PYTHONPATH: "$CI_PROJECT_DIR/src"
+  script:
+  - python -m pip install "import-linter>=2.5,<2.6"
+  - lint-imports --verbose
+  allow_failure: true

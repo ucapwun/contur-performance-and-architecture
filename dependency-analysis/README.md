@@ -7,9 +7,10 @@ under `src/contur`. The run therefore records the starting source before the lat
 changes and before the dedicated `database` package existed. It reported 14 direct violations
 across eight package directions.
 
-The complete job trace has not yet been archived in this local repository. The current evidence
-is the retained GitLab screenshot, which records the commit, job, pipeline, complete violation
-list, broken-contract exit status and passing `pytest` job.
+The complete raw job trace is not distributed in this repository. The retained project record
+captures the commit, job, pipeline, complete violation list, broken-contract exit status and
+passing `pytest` job. This historical result is reported as a recorded snapshot rather than a
+locally reproducible CI run.
 
 The `2026-08-04-baseline` directory records a later Import Linter contract, command output and
 related Pylint snapshots used for the architecture strand.

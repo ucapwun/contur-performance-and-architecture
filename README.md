@@ -19,7 +19,32 @@ as merged into Contur.
   snapshots together with the reproducible cross-package import census.
 - [`patches/`](patches/) explains why the linked upstream merge requests are used as the
   authoritative contribution diffs.
+- [`tests/`](tests/) contains standard-library smoke tests for the retained profile and selected
+  output files.
 - [`thesis/`](thesis/) contains the dissertation PDF associated with this evidence snapshot.
+
+## Quick start
+
+The repository's smoke tests use only Python's standard library and the retained sample evidence.
+They check that the baseline cProfile file can be read and that the 300 selected statistical
+output rows match between one recorded baseline and modified run:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+The retained profile can also be summarised directly:
+
+```bash
+python3 profiling/scripts/profile_summary.py \
+  profiling/results/observable_isolated_20260803T004228+0100/profiles/baseline/profile.prof \
+  --output-dir /tmp/contur-profile-summary
+```
+
+To inspect the interactive call graph, install
+[SnakeViz](https://jiffyclub.github.io/snakeviz/) and open the same `.prof` file. The dependency
+census requires a local Contur Git checkout; a complete example is given in
+[`dependency-analysis/package-import-counts/README.md`](dependency-analysis/package-import-counts/README.md).
 
 ## Main recorded result
 
@@ -39,10 +64,10 @@ The analysis scripts use Python 3 and its standard library. Re-running Contur it
 requires a working Contur environment and its scientific dependencies, including Rivet and YODA.
 The accepted run used Python 3.9.12, Contur 3.1.4, Rivet 4.1.3 and YODA 2.1.3.
 
-The complete 300-file grid input is not included in this repository. The retained timing,
-environment and comparison files support the dissertation's reported result, but reproducing the
-full benchmark also requires access to the recorded Contur grid input described in
-[`profiling/README.md`](profiling/README.md).
+The complete 300-file grid input is not distributed in this repository. The retained `.prof` and
+`core_outputs.csv` files provide sample inputs for the smoke tests above. They support inspection
+of the recorded analysis, while reproducing the full benchmark also requires access to the
+original Contur grid input described in [`profiling/README.md`](profiling/README.md).
 
 ## Status and evidence cut-off
 

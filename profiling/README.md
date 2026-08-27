@@ -42,7 +42,8 @@ The full command used for the accepted comparison and its acceptance checks are 
 `scripts/experiment-protocol.md`. Host-specific paths in the retained command files document the
 original run and will need to be changed for another machine.
 
-The complete input grid is not yet present in this local repository draft. A redistributable
-sample input and its expected output must be added before submission to satisfy the assessment
-guidance independently of access to the UCL cluster.
-
+The complete 300-file input grid is not distributed in this assessment repository. The retained
+raw `.prof` files and paired `core_outputs.csv` files are the redistributable sample inputs used by
+the repository smoke tests. They allow the profile summarisation and exact-output comparison code
+to be run without access to the UCL cluster. Reproducing the complete Contur benchmark still
+requires the original grid and a compatible Contur environment.
