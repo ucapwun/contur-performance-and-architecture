@@ -19,15 +19,16 @@ as merged into Contur.
   snapshots together with the reproducible cross-package import census.
 - [`patches/`](patches/) explains why the linked upstream merge requests are used as the
   authoritative contribution diffs.
-- [`tests/`](tests/) contains standard-library smoke tests for the retained profile and selected
-  output files.
+- [`tests/`](tests/) contains standard-library tests for the retained evidence and the main
+  analysis-script boundary cases.
 - [`thesis/`](thesis/) contains the dissertation PDF associated with this evidence snapshot.
 
 ## Quick start
 
-The repository's smoke tests use only Python's standard library and the retained sample evidence.
-They check that the baseline cProfile file can be read and that the 300 selected statistical
-output rows match between one recorded baseline and modified run:
+The repository's tests use only Python's standard library and the retained sample evidence. They
+check that the baseline cProfile file can be read, that the 300 selected statistical output rows
+match between one recorded baseline and modified run, and that mismatched outputs, elapsed-time
+formats and non-module-scope imports are handled as intended:
 
 ```bash
 python3 -m unittest discover -s tests -v

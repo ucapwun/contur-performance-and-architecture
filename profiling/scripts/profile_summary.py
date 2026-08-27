@@ -13,6 +13,7 @@ TARGET_NAMES = {"__init__", "__getExpected", "add_signal_component"}
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse the profile path and summary-output options."""
     parser = argparse.ArgumentParser()
     parser.add_argument("profile", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -21,12 +22,14 @@ def parse_args() -> argparse.Namespace:
 
 
 def write_sorted_stats(profile: Path, destination: Path, sort_key: str, limit: int) -> None:
+    """Write a bounded pstats report sorted by one supported statistic."""
     with destination.open("w", encoding="utf-8") as stream:
         stats = pstats.Stats(str(profile), stream=stream)
         stats.strip_dirs().sort_stats(sort_key).print_stats(limit)
 
 
 def main() -> int:
+    """Create text summaries and a TSV row set for the selected profile."""
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
 

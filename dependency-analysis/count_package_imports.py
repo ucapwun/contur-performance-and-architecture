@@ -61,6 +61,7 @@ class ImportRecord:
 
 
 def git(repo: Path, *args: str) -> str:
+    """Run a read-only Git command in the selected repository and return stdout."""
     result = subprocess.run(
         ["git", "-C", str(repo), *args],
         check=True,
@@ -72,6 +73,7 @@ def git(repo: Path, *args: str) -> str:
 
 
 def module_from_path(path: str) -> str:
+    """Convert a Python source path below src into its dotted module name."""
     relative = path.removeprefix("src/").removesuffix(".py")
     parts = relative.split("/")
     if parts[-1] == "__init__":
@@ -80,6 +82,7 @@ def module_from_path(path: str) -> str:
 
 
 def source_package(module: str, packages: set[str]) -> str | None:
+    """Return the top-level Contur package owning a source module, if recognised."""
     parts = module.split(".")
     if len(parts) >= 2 and parts[0] == "contur" and parts[1] in packages:
         return parts[1]
@@ -87,6 +90,7 @@ def source_package(module: str, packages: set[str]) -> str | None:
 
 
 def current_package(module: str, source_file: str) -> list[str]:
+    """Return the package components used to resolve a relative import."""
     parts = module.split(".")
     if not source_file.endswith("/__init__.py"):
         parts = parts[:-1]
@@ -94,6 +98,7 @@ def current_package(module: str, source_file: str) -> list[str]:
 
 
 def resolve_from_module(module: str, source_file: str, node: ast.ImportFrom) -> str:
+    """Resolve the module named by an absolute or relative from-import node."""
     if node.level == 0:
         return node.module or ""
     base = current_package(module, source_file)
@@ -106,6 +111,7 @@ def resolve_from_module(module: str, source_file: str, node: ast.ImportFrom) -> 
 
 
 def target_package(target: str, packages: set[str]) -> str | None:
+    """Return the recognised top-level package imported by a dotted target."""
     parts = target.split(".")
     if len(parts) >= 2 and parts[0] == "contur" and parts[1] in packages:
         return parts[1]
@@ -113,12 +119,15 @@ def target_package(target: str, packages: set[str]) -> str | None:
 
 
 def violates_target(source: str, target: str) -> bool:
+    """Check one package direction against the dissertation target contract."""
     if target == "database":
         return source != "data"
     return LAYER[target] <= LAYER[source]
 
 
 class ImportVisitor(ast.NodeVisitor):
+    """Collect cross-package imports and the source context in which they occur."""
+
     def __init__(
         self,
         source_file: str,
@@ -134,6 +143,7 @@ class ImportVisitor(ast.NodeVisitor):
         self.records: list[ImportRecord] = []
 
     def context(self) -> str:
+        """Describe whether the current import is at module, function or type-checking scope."""
         if self.type_checking_depth:
             return "TYPE_CHECKING"
         if self.function_depth:
@@ -141,6 +151,7 @@ class ImportVisitor(ast.NodeVisitor):
         return "module"
 
     def add_targets(self, node: ast.AST, targets: set[str]) -> None:
+        """Add one record per distinct imported top-level package on a statement."""
         if self.source is None:
             return
         seen_packages: set[str] = set()
@@ -202,22 +213,25 @@ class ImportVisitor(ast.NodeVisitor):
 
 
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, object]]) -> None:
+    """Write a deterministic CSV file with the requested columns."""
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
 
 
-def main() -> None:
+def parse_args() -> argparse.Namespace:
+    """Parse the repository revision and output-location arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, required=True)
     parser.add_argument("--revision", required=True)
     parser.add_argument("--label", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    repo = args.repo.resolve()
-    revision = git(repo, "rev-parse", args.revision).strip()
+
+def discover_source(repo: Path, revision: str) -> tuple[list[str], set[str]]:
+    """List Python files and top-level packages in one recorded Git revision."""
     paths = [
         path
         for path in git(
@@ -236,7 +250,13 @@ def main() -> None:
         for path in paths
         if path.count("/") >= 3 and path.endswith("/__init__.py")
     }
+    return paths, packages
 
+
+def collect_imports(
+    repo: Path, revision: str, paths: list[str], packages: set[str]
+) -> tuple[list[ImportRecord], list[dict[str, str]], list[dict[str, str]]]:
+    """Parse the selected files and return imports, syntax errors and syntax warnings."""
     records: list[ImportRecord] = []
     parse_errors: list[dict[str, str]] = []
     parse_warnings: list[dict[str, str]] = []
@@ -255,7 +275,6 @@ def main() -> None:
         visitor = ImportVisitor(path, module_from_path(path), packages)
         visitor.visit(tree)
         records.extend(visitor.records)
-
     records.sort(
         key=lambda item: (
             item.source_package,
@@ -264,6 +283,27 @@ def main() -> None:
             item.line,
         )
     )
+    return records, parse_errors, parse_warnings
+
+
+def ordered_package_names(packages: set[str]) -> list[str]:
+    """Return recognised packages in the stable order used by the output matrix."""
+    ordered = [package for package in PACKAGE_ORDER if package in packages]
+    ordered.extend(sorted(packages - set(ordered)))
+    return ordered
+
+
+def write_census(
+    output_dir: Path,
+    label: str,
+    revision: str,
+    paths: list[str],
+    packages: set[str],
+    records: list[ImportRecord],
+    parse_errors: list[dict[str, str]],
+    parse_warnings: list[dict[str, str]],
+) -> dict[str, object]:
+    """Write detailed, matrix, violation and JSON summary files for one census."""
     direction_counts = Counter(
         (record.source_package, record.target_package) for record in records
     )
@@ -273,14 +313,11 @@ def main() -> None:
         if record.violates_target
     )
     contexts = Counter(record.context for record in records)
-
-    ordered_packages = [package for package in PACKAGE_ORDER if package in packages]
-    ordered_packages.extend(sorted(packages - set(ordered_packages)))
-    output_dir = args.output_dir
+    ordered_packages = ordered_package_names(packages)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     write_csv(
-        output_dir / f"{args.label}-imports.csv",
+        output_dir / f"{label}-imports.csv",
         list(asdict(records[0]).keys()) if records else list(ImportRecord.__annotations__),
         [asdict(record) for record in records],
     )
@@ -301,7 +338,7 @@ def main() -> None:
     incoming_row["outgoing_total"] = len(records)
     matrix_rows.append(incoming_row)
     write_csv(
-        output_dir / f"{args.label}-matrix.csv",
+        output_dir / f"{label}-matrix.csv",
         ["source_package", *ordered_packages, "outgoing_total"],
         matrix_rows,
     )
@@ -314,13 +351,13 @@ def main() -> None:
         for (source, target), count in sorted(violation_counts.items())
     ]
     write_csv(
-        output_dir / f"{args.label}-violations.csv",
+        output_dir / f"{label}-violations.csv",
         ["source_package", "target_package", "direct_imports"],
         violation_rows,
     )
 
-    summary = {
-        "label": args.label,
+    summary: dict[str, object] = {
+        "label": label,
         "revision": revision,
         "counting_rules": {
             "unit": "one imported target package per AST import statement",
@@ -339,9 +376,32 @@ def main() -> None:
         "target_contract_violations": sum(violation_counts.values()),
         "violation_directions": len(violation_counts),
     }
-    (output_dir / f"{args.label}-summary.json").write_text(
+    (output_dir / f"{label}-summary.json").write_text(
         json.dumps(summary, indent=2) + "\n",
         encoding="utf-8",
+    )
+    return summary
+
+
+def main() -> None:
+    """Run a reproducible cross-package import census for one Git revision."""
+    args = parse_args()
+
+    repo = args.repo.resolve()
+    revision = git(repo, "rev-parse", args.revision).strip()
+    paths, packages = discover_source(repo, revision)
+    records, parse_errors, parse_warnings = collect_imports(
+        repo, revision, paths, packages
+    )
+    summary = write_census(
+        args.output_dir,
+        args.label,
+        revision,
+        paths,
+        packages,
+        records,
+        parse_errors,
+        parse_warnings,
     )
     print(json.dumps(summary, indent=2))
 

@@ -21,6 +21,7 @@ FIELDS = [
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse the extract or compare subcommand and its file paths."""
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -36,6 +37,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def extract_rows(database: Path, selected_run_points: list[str]) -> list[dict[str, str]]:
+    """Extract ordered core statistical-output rows from one Contur result database."""
     query = """
         SELECT model.name,
                model.version,
@@ -71,6 +73,7 @@ def extract_rows(database: Path, selected_run_points: list[str]) -> list[dict[st
 
 
 def write_rows(output: Path, rows: list[dict[str, str]]) -> None:
+    """Write extracted rows with the stable field order used for comparison."""
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=FIELDS, lineterminator="\n")
@@ -79,6 +82,7 @@ def write_rows(output: Path, rows: list[dict[str, str]]) -> None:
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
+    """Read a core-output CSV and reject an unexpected schema."""
     with path.open(encoding="utf-8", newline="") as stream:
         reader = csv.DictReader(stream)
         if reader.fieldnames != FIELDS:
@@ -87,6 +91,7 @@ def read_rows(path: Path) -> list[dict[str, str]]:
 
 
 def compare_rows(baseline: Path, modified: Path) -> int:
+    """Compare two ordered extracts exactly and report the first difference."""
     left = read_rows(baseline)
     right = read_rows(modified)
     if left == right:
@@ -106,6 +111,7 @@ def compare_rows(baseline: Path, modified: Path) -> int:
 
 
 def main() -> int:
+    """Run the requested extraction or exact-comparison operation."""
     args = parse_args()
     if args.command == "extract":
         rows = extract_rows(args.database, args.run_point)

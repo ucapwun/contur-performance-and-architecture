@@ -18,6 +18,7 @@ ELAPSED_PATTERN = re.compile(
 
 
 def elapsed_seconds(value: str) -> float:
+    """Convert a GNU time elapsed value in MM:SS or HH:MM:SS form to seconds."""
     fields = value.split(":")
     if len(fields) == 2:
         minutes, seconds = fields
@@ -29,6 +30,7 @@ def elapsed_seconds(value: str) -> float:
 
 
 def read_time(path: Path) -> dict[str, str]:
+    """Read the elapsed time and available resource fields from one GNU time file."""
     values = {}
     for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
         elapsed_match = ELAPSED_PATTERN.match(line)
@@ -46,6 +48,7 @@ def read_time(path: Path) -> dict[str, str]:
 
 
 def main() -> int:
+    """Summarise all retained unprofiled timings and optionally compare two cases."""
     parser = argparse.ArgumentParser()
     parser.add_argument("result_root", type=Path)
     parser.add_argument("--baseline-label")
