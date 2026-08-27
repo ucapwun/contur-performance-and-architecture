@@ -293,34 +293,25 @@ def ordered_package_names(packages: set[str]) -> list[str]:
     return ordered
 
 
-def write_census(
-    output_dir: Path,
-    label: str,
-    revision: str,
-    paths: list[str],
-    packages: set[str],
-    records: list[ImportRecord],
-    parse_errors: list[dict[str, str]],
-    parse_warnings: list[dict[str, str]],
-) -> dict[str, object]:
-    """Write detailed, matrix, violation and JSON summary files for one census."""
-    direction_counts = Counter(
-        (record.source_package, record.target_package) for record in records
-    )
-    violation_counts = Counter(
-        (record.source_package, record.target_package)
-        for record in records
-        if record.violates_target
-    )
-    contexts = Counter(record.context for record in records)
-    ordered_packages = ordered_package_names(packages)
-    output_dir.mkdir(parents=True, exist_ok=True)
-
+def write_imports_csv(
+    output_dir: Path, label: str, records: list[ImportRecord]
+) -> None:
+    """Write one row per recorded cross-package import to `{label}-imports.csv`."""
     write_csv(
         output_dir / f"{label}-imports.csv",
         list(asdict(records[0]).keys()) if records else list(ImportRecord.__annotations__),
         [asdict(record) for record in records],
     )
+
+
+def write_matrix_csv(
+    output_dir: Path,
+    label: str,
+    ordered_packages: list[str],
+    direction_counts: Counter[tuple[str, str]],
+    total_records: int,
+) -> None:
+    """Write the source-by-target import count matrix to `{label}-matrix.csv`."""
     matrix_rows: list[dict[str, object]] = []
     for source in ordered_packages:
         row: dict[str, object] = {"source_package": source}
@@ -335,13 +326,19 @@ def write_census(
         incoming_row[target] = sum(
             direction_counts[(source, target)] for source in ordered_packages
         )
-    incoming_row["outgoing_total"] = len(records)
+    incoming_row["outgoing_total"] = total_records
     matrix_rows.append(incoming_row)
     write_csv(
         output_dir / f"{label}-matrix.csv",
         ["source_package", *ordered_packages, "outgoing_total"],
         matrix_rows,
     )
+
+
+def write_violations_csv(
+    output_dir: Path, label: str, violation_counts: Counter[tuple[str, str]]
+) -> None:
+    """Write each pair breaking the layering contract to `{label}-violations.csv`."""
     violation_rows = [
         {
             "source_package": source,
@@ -356,6 +353,20 @@ def write_census(
         violation_rows,
     )
 
+
+def write_summary_json(
+    output_dir: Path,
+    label: str,
+    revision: str,
+    paths: list[str],
+    ordered_packages: list[str],
+    records: list[ImportRecord],
+    parse_errors: list[dict[str, str]],
+    parse_warnings: list[dict[str, str]],
+    contexts: Counter[str],
+    violation_counts: Counter[tuple[str, str]],
+) -> dict[str, object]:
+    """Build the census summary dict, write it to the `{label}-summary.json` file."""
     summary: dict[str, object] = {
         "label": label,
         "revision": revision,
@@ -381,6 +392,48 @@ def write_census(
         encoding="utf-8",
     )
     return summary
+
+
+def write_census(
+    output_dir: Path,
+    label: str,
+    revision: str,
+    paths: list[str],
+    packages: set[str],
+    records: list[ImportRecord],
+    parse_errors: list[dict[str, str]],
+    parse_warnings: list[dict[str, str]],
+) -> dict[str, object]:
+    """Write detailed, matrix, violation and JSON summary files for one census."""
+    direction_counts = Counter(
+        (record.source_package, record.target_package) for record in records
+    )
+    violation_counts = Counter(
+        (record.source_package, record.target_package)
+        for record in records
+        if record.violates_target
+    )
+    contexts = Counter(record.context for record in records)
+    ordered_packages = ordered_package_names(packages)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    write_imports_csv(output_dir, label, records)
+    write_matrix_csv(
+        output_dir, label, ordered_packages, direction_counts, len(records)
+    )
+    write_violations_csv(output_dir, label, violation_counts)
+    return write_summary_json(
+        output_dir,
+        label,
+        revision,
+        paths,
+        ordered_packages,
+        records,
+        parse_errors,
+        parse_warnings,
+        contexts,
+        violation_counts,
+    )
 
 
 def main() -> None:
