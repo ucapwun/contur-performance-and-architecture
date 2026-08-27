@@ -1,7 +1,8 @@
 # Contribution index
 
 This index separates changes merged into upstream Contur from work that remains on feature
-branches. Merge-request status was recorded on 16 August 2026.
+branches. Architecture merge-request status was recorded on 16 August 2026. The Import Linter
+row additionally records the later configuration-only revision described below.
 
 | Contribution | Upstream record | Recorded status | Stable revision | Dissertation topic |
 |---|---|---|---|---|
@@ -13,8 +14,11 @@ branches. Merge-request status was recorded on 16 August 2026.
 | Move webpage generation out of `util` | [MR !678](https://gitlab.com/hepcedar/contur/-/merge_requests/678) | Merged, pipeline passed | `436f021355ca5834e39a740df3fcbf1720fc5beb` | Webpage package boundary |
 | Characterise analysis-database object identity | [MR !681](https://gitlab.com/hepcedar/contur/-/merge_requests/681) | Merged, pipeline passed | `1a8dd9835c8f9248d1054e95365cf256a25585f1` | Database redesign tests |
 | Add low-level analysis database records | [MR !685](https://gitlab.com/hepcedar/contur/-/merge_requests/685) | Open feature branch | `5f621beed978905f09ecc96772d26bf01a10883d` | Partial database boundary implementation |
-| Add Import Linter dependency rules | [MR !652](https://gitlab.com/hepcedar/contur/-/merge_requests/652) | Draft feature branch, intentionally not merged | `a1985475be99f8708441f35c9a40875424350fe7` | Non-blocking architecture check |
+| Add Import Linter dependency rules | [MR !652](https://gitlab.com/hepcedar/contur/-/merge_requests/652) | Draft feature branch, intentionally not merged | `af8102009b58f7a60a527bfb25e339f88dfd3fcd` | Non-blocking architecture check updated after the `webpages` relocation |
 
 The target dependency structure in the dissertation is a design target. It is not a claim that
 the current Contur package already satisfies every proposed boundary.
 
+The Import Linter row records the later configuration state. Its quantitative dissertation
+snapshot remains the earlier CI run at `a1985475be99f8708441f35c9a40875424350fe7`; no new
+violation total is attributed to `af8102009b`.

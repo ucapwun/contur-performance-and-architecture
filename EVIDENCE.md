@@ -114,7 +114,9 @@ benchmark results.
 
 The architecture status below is kept separate from the profiling evidence. Merge status was
 checked against the local `origin/main` history and the GitLab merge-request view supplied for
-the dissertation update.
+the dissertation update. Database-boundary status remains fixed at that reporting cut-off. The
+Import Linter bullet additionally records a configuration-only revision from 26 August 2026 so
+that the saved contract includes the already merged `webpages` package.
 
 - `!678`, **Move webpage generation out of util**, is merged. Merge commit `436f021355` is an
   ancestor of local `origin/main`. The change moves `util/rst_utils.py` to
@@ -130,8 +132,11 @@ the dissertation update.
   this branch does not yet remove the database--data cycle.
 - `!652`, **Add import-linter dependency rules**, remains a draft branch by design. It records
   violations through a non-blocking CI job and is intended to remain separate until the circular
-  dependencies have been handled. The dissertation's quantitative snapshot remains the verified
-  run at commit `a1985475`; a later like-for-like rerun is still required.
+  dependencies have been handled. A later configuration-only commit, `af8102009b`, adds the
+  merged `webpages` package to the layers, makes the layered contract exhaustive, adds a protected
+  `database` contract and constrains Import Linter to the 2.5 release series. It changes no files
+  under `src/contur`. The dissertation's quantitative snapshot remains the verified run at commit
+  `a1985475`; no new violation total is claimed for the later configuration.
 
 ### Original Import Linter CI baseline
 

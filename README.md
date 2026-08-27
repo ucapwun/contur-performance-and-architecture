@@ -46,6 +46,8 @@ full benchmark also requires access to the recorded Contur grid input described 
 
 ## Status and evidence cut-off
 
-Contribution status was recorded on 16 August 2026 and is reported as a fixed dissertation
-cut-off. Later changes to open or draft merge requests are outside the scope of this evidence
-snapshot.
+Architecture contribution status was recorded on 16 August 2026 and is reported as a fixed
+dissertation cut-off. Later database-boundary changes are outside the scope of this evidence
+snapshot. The only later branch revision retained here is the configuration-only Import Linter
+commit `af8102009b` from 26 August 2026, which updates the proposed contract after the merged
+`webpages` relocation without adding a new quantitative result.

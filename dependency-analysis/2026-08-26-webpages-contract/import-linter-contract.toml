@@ -1,0 +1,29 @@
+[tool.importlinter]
+root_package = "contur"
+
+[[tool.importlinter.contracts]]
+id = "proposed-layers"
+name = "proposed layered architecture"
+type = "layers"
+containers = ["contur"]
+layers = [
+    "run",
+    "plot | scan | oracle | webpages",
+    "factories",
+    "data",
+    "database",
+    "util",
+    "config",
+]
+exhaustive = true
+
+[[tool.importlinter.contracts]]
+id = "database-access-through-data"
+name = "database can be imported directly only by data"
+type = "protected"
+protected_modules = [
+    "contur.database",
+]
+allowed_importers = [
+    "contur.data",
+]

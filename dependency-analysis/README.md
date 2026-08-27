@@ -20,6 +20,14 @@ of a provisional boundary and is intentionally not presented as an enforceable, 
 The recorded snapshot at revision `a1985475be99f8708441f35c9a40875424350fe7` reported 12 direct
 violations across eight package directions.
 
+The `2026-08-26-webpages-contract` directory records a later configuration-only revision of the
+same branch at `af8102009b58f7a60a527bfb25e339f88dfd3fcd`. This revision follows the merged
+`webpages` relocation. It adds `webpages` to the proposed layers, makes the layered contract
+exhaustive, and adds a protected contract under which only `contur.data` may import
+`contur.database` directly. The CI job remained non-blocking. No new violation total from this
+configuration is used in the dissertation, so the recorded quantitative result above is not
+replaced.
+
 The reconstructed result at revision `ea70f51cb12af174459aa4f7a254943d133cbd9f` is no longer
 used as the dissertation's initial baseline because several project changes had already modified
 the source by that point.
